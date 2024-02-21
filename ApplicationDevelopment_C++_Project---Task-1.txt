@@ -1,0 +1,219 @@
+#include <iostream>
+#include <iomanip>
+#include <math.h>
+#include <ctime>
+
+using namespace std;
+
+/*Function prototyping, so that it will be easy to use the functions in main() funtion.
+And because the funtions are below the main funtion, if the main funtion was below,
+all the functions then, the was not gonna be a need to declare the dunctions here*/
+
+void registerEmployee(string fName, string lName, string idNum, string email);
+double CalcAndDisplayPrices(int qty, double itemPrice, double totalExc,double totalInc);
+bool check_string (string str);
+bool check_number (string str);
+
+int main()
+{
+    //Declaration of local variables
+    string compName;
+    string validUntilDate;
+    string firstName, lastName, idNumber, emailAddress;
+    string strName, compCity, sectionName, postCode;
+    int numOrders = 0;
+    int quantity = 0;
+    int numLinesOrder = 0;
+    double itemPrice = 0.00;
+    string itemCode;
+    string accNum = " ";
+    double totalPrice = 0.00;
+    double totalPriceExc = 0.00;
+    double totalPriceInc = 0.00;
+
+    //Function call so that the user will enter their login details.
+    registerEmployee(firstName, lastName, idNumber, emailAddress);
+
+    //Details of the company so that it will be easier to deliever
+    //Specifying hopw many orders at hand will be placed.
+    cout << "Provide the number of orders to be placed: ";
+    cin >> numOrders;
+
+    //The beginning of the for loop to get information of the company.
+    for(int i = 0; i < numOrders; i++)
+    {
+        cout << "Enter company name: ";
+        cin >> compName;
+        //This while loop test and makes sure the user did not enter number as the company name.
+        while(check_number(compName))
+        {
+            if(check_number(compName))
+            {
+                //If the user mistakely entered a number, the user will be requested to re-enter company name
+                cout << "The company name you have entered contain numbers." << endl;
+                cout << "Enter company name: ";
+                cin >> compName;
+            }
+            else
+            {
+                // If the useer enter correct name, then the code break and continue to the next input from the user
+                break;
+            }
+        }
+
+        cout << "Enter account number: ";
+        cin >> accNum; cout << endl;
+        //Here the while loop makes sure the user enter an account number using only numbers.
+        //And account number is a string because we are not gonna use it during calculations.
+       
+	 while(check_string(accNum))
+        {
+	      if(check_string(accNum))
+            {
+	       cout << "The company account you have entered contain alphabets." << endl;
+               cout << "Enter account number: ";
+               cin >> accNum; cout << endl;
+            }
+	        else
+	        {
+                break;
+            }
+        }
+        cout << "Enter company street number and name: ";
+        cin >> strName;
+        cout << "Enter section name: ";
+        cin >> sectionName;
+        cout << "Enter company cituated city: ";
+        cin >> compCity;
+        cout << "Enter postal code: ";
+        cin >> postCode;
+
+        cout <<"\n" <<endl;
+        cout <<"Please enter number of different items(lines) in the order: ";
+        cin >> numLinesOrder;
+
+        //The for loop enables the user to punch in all the lines that are in a order,
+        // if the order has ten items to be ordered, then they will all fiil, based on the number entered by the user.
+	    for(int l = 0; l < numLinesOrder; l++)
+	    {
+      	  	cout << "Enter item code: ";
+        	cin >> itemCode;
+        	cout << "Please enter item quantity: ";
+       	 	cin >> quantity;
+        	cout << "Please enter item price: R";
+        	cin >> itemPrice;
+        	inputPrice = inputPrice + itemPrice;
+        	cout << "\n" << endl;
+            //totalPrice = totalPrice + inputPrice;
+	     }
+        //Calculations (Proccess)
+        //Here I add the input price to the total excluding vat,
+        // so that it will be possible to calculate total price including value added tax.
+        
+	totalPriceExc = totalPriceExc + inputPrice;
+        
+	//Function call to calculate the price of specific item with and without VAT
+        
+	CalcAndDisplayPrices(quantity,itemPrice, totalPriceExc, totalPriceInc);
+
+            //The if statement checks whether the order qualifies which type of delivery.
+            // For local delivery, the price excluding VAT should be R1000 and more.
+            //And the price for provintial delivery has to be R200 or more
+            // If it's bellow than that, the customer has to come and collect their order.
+
+            if(totalPriceExc >= 2000)
+            {
+                cout << "The order qualifies for global (with the country) delivery."<<endl;
+            }
+            else if(totalPriceExc < 2000 || totalPriceExc >= 1000)
+            {
+                cout << "The order qualifies for local (within the province) delivery."<<endl;
+            }
+            else
+            {
+                cout <<"The order does not qualify for delivery, customer needs to pick the orde up."<<endl;
+            }
+
+        cout <<"The employee who was assisting with the order is: "<< firstName << endl;
+
+        //It is the declaration of time
+        time_t currentDate;
+        //Where struct is used to sto different data types, which are time and date
+        struct tm nowLocal;
+        currentDate = time(0); //get time from the operating system
+
+        nowLocal = *localtime(&currentDate);
+
+        //This will be the output of date and the company delivery details.
+        cout << "The order was places on: " <<nowLocal.tm_mday <<"/"<< nowLocal.tm_mon <<"/"<<1900 + nowLocal.tm_year <<endl;
+        cout <<"The order will be closed on " << 10 + nowLocal.tm_mday <<"/"<< nowLocal.tm_mon <<"/"<<1900 + nowLocal.tm_year
+        << " if it has not been collected or delivered " <<endl;
+        cout << "\n";
+        cout <<"The destination of the order is: " << strName <<endl;
+        cout <<"                               : " << sectionName <<endl;
+        cout <<"                               : " << compCity <<endl;
+        cout <<"                               : " << postCode <<endl;
+
+    }
+
+
+    return 0;
+}
+//Below are the functions that are called in the main () function
+bool check_string (string str)
+{
+    //This one checks if the character is not alphabet it should return false
+    for(int z = 0; z < str.length(); z++)
+    {
+        if(!isalpha(str[z]))
+        {
+            return false;
+        }
+    }
+ return true;
+}
+
+bool check_number (string str)
+{
+    //This one checks if the character is not a number it should return false
+    for(int z = 0; z < str.length(); z++)
+    {
+        if(!isdigit(str[z]))
+        {
+            return false;
+        }
+    }
+   return true;
+}
+
+void registerEmployee(string fName, string lName, string idNum, string email)
+{
+    //Thi funtion helps to get user details, that will process the order.
+    cout << "Please enter your first name: ";
+    cin >> fName;
+    cout << "Please enter your last name: ";
+    cin >> lName;
+    cout << "Please enter your ID number: ";
+    cin >> idNum;
+    cout << "Please enter your email address: ";
+    cin >> email;
+    cout << " " << endl;
+}
+
+double CalcAndDisplayPrices(int qty, double itemPrice, double totalExc,double totalInc)
+{
+    //This function calculate and displate total price exclunding VAT
+    //This function calculate and displate total price inclunding VAT
+  totalExc = qty * itemPrice;
+  totalInc = totalExc + (totalExc * 0.15);
+
+    cout <<"The total price of the order excluding vat is R" << totalExc << endl;
+    cout <<"The total price of the order including vat is R"<< totalInc << endl;
+}
+//Sodinga Lwando
+//0655940699
+//Sodingalwando98@gmail.com
+
+//Person request.
+//It would be a major appriciation for me to get the honest feedback, and ways to be a better developer.
+//Sections to focus on and how to develop my and grow as a developer.
