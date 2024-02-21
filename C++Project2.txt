@@ -1,0 +1,165 @@
+//The program must prompt add five class tests from the student, and 2 semester tests and the exam.
+// and see if the student qualifies to go a write final exam.
+//The program must check if the student obtain a distinction.
+
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+int main()
+{
+
+//Variables declaration
+int cTest;
+int sumTest = 0;
+int totalSumTest = 0;
+int semesterTest = 0;
+int sumSemester = 0;
+int totalSemesterTest = 0;
+int semesterWork = 0;
+int exam = 0;
+int examMark = 0;
+int finalMark = 0;
+int highestFinMark = 0;
+string topAchiever = " ";
+string studName;
+string studSurname;
+string studNum;
+int counter = 0;
+int numStudent = 0;
+
+    //Prompt student information
+    //Each class test weighs 4% towards the semester work
+    //Semester tests weighs 10% each towards the semester work
+
+    cout << "Enter number of students: ";
+    cin >> numStudent;
+
+    while(counter < numStudent)
+    {
+        cout << "Enter student number: ";
+        cin >> studNum;
+        cout << "Enter student name: ";
+        cin >> studName;
+        cout << "Enter student last name: ";
+        cin >> studSurname;
+        cout << "\n";
+
+        //To avoid writing the same lines of code for known number of tests,
+        //the for loop will do the request 5 time to the user.
+
+        for(int i = 1; i <= 5; i++)
+        {
+            cout << "Enter marks for class test" << i <<": ";
+            cin >> cTest;
+            sumTest  = sumTest + cTest;
+        }
+
+        //It is the calculation of 5 class sum, the multiplying them to get their weight out of 20 since one test weighs 4%
+        totalSumTest = ((totalSumTest + sumTest) * 0.04);
+
+        cout << "\nThe total of tests is: " << totalSumTest << " out of 20" << " each test weighing 4%" << endl;
+
+        //The for loop works to get the 2 semester tests that are witten by the student.
+
+        for( int a = 1; a <= 2; a++ )
+        {
+            cout << "Enter marks for semester test" << a << ": ";
+            cin >> semesterTest;
+            sumSemester = sumSemester + semesterTest;
+        }
+
+        //Adding two semester tests to know how much the student got out 20%, since each semester test weighs 10%
+        totalSemesterTest = (totalSemesterTest + (sumSemester * 0.1));
+
+        cout << "\nThe total of semester tests is: " << totalSemesterTest << " where each semester test weighs 10%";
+        cout << "\n" << endl;
+
+        semesterWork = totalSumTest + totalSemesterTest;
+
+        cout << "The semester mark is: " << semesterWork;
+        cout << "\n";
+
+        //Checking if the student qualifies to write the final exam
+        //By checking if the reach 50% on the semester work.
+        //If the student did not rach 50% they do not qualify ro write final exam.
+
+        if(semesterWork >= 20) //Since 50% of 40 is 20
+        {
+            cout << "\nThe student qualifies to write the final exam"<< endl;
+            cout << "Enter exam mark: ";
+            cin >> exam;
+            examMark = exam * 0.6;
+
+		if(finalMark > highestFinMark)
+       		 {
+            		highestFinMark = finalMark;
+        	 }
+        }
+        else
+        {
+            cout <<"The student does not qualify to write final exam"<< endl;
+        }
+
+        cout << "The exam mark is: " << exam << "%" << endl;
+        cout << "\n";
+
+        //Calculating finala mark by adding semester work mark and exam mark.
+
+        finalMark = semesterWork + examMark;
+        cout << "The final mark of a student is: " << finalMark << endl;
+
+        //Check if the final mark is greater than 49%, since 50% is the pass mark.
+        if(finalMark > 49)
+        {
+            cout << studNum <<endl;
+            cout << studSurname << endl;
+            cout << studName << " Passed";
+        }
+
+        //Check if the final mark is equal to 74% if so then add 1 so that the student will obtain a distinction
+        //The test if the final mark is greater 74%.
+        if(finalMark == 74)
+        {
+        finalMark = finalMark + 1;
+        	if(finalMark > 74)
+        	{
+            		cout << studNum << endl;
+            		cout << studSurname << endl;
+            		cout << studName <<" The student passed with a distinction" << endl;
+			cout <<"\n"<<endl;
+            }
+        }
+        else if(finalMark > 74)//Check if final mark is greater than 74%, the student passed with distinction
+        {
+      		cout << studNum << endl;
+            	cout << studSurname << endl;
+            	cout << studName <<" The student passed with a distinction" << endl;
+		cout <<"\n"<<endl;
+        }
+
+        //If the final mark is lower tha 50%, the student failed
+        if(finalMark < 50)
+        {
+            cout << studNum <<endl;
+            cout << studSurname << endl;
+            cout << studName << " Failed" << endl;
+	    cout <<"\n"<<endl;
+        }
+
+        cout << "\n";
+
+        cTest = 0;
+        sumTest = 0;
+        semesterTest = 0;
+        totalSemesterTest = 0;
+        semesterWork = 0;
+        finalMark = 0;
+
+        counter++;
+
+    }
+
+    return 0;
+} 
